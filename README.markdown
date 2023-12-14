@@ -16,7 +16,7 @@ cd lexical-playground-only
 
 cd packages/lexical-playground
 npm install
-npm install babel @rollup/plugin-babel @babel/plugin-transform-flow-strip-types @babel/preset-react --save
+npm install babel @rollup/plugin-babel @babel/plugin-transform-flow-strip-types @babel/preset-react
 npm run build-prod
 cd build
 python3 -m http.server
