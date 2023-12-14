@@ -12,6 +12,7 @@ cd lexical-playground-only
 # tar -xf v0.12.5.tar.gz --strip-components=1 lexical-0.12.5/packages/lexical-playground lexical-0.12.5/packages/shared
 # sed -i "s@alias: moduleResolution@alias: [ { find: 'shared', replacement: path.resolve('../shared/src') } ]@" packages/lexical-playground/vite.prod.config.js
 # git add -A -f packages
+# git commit -a -m 'extracting only packages/lexical-playground and packages/shared'
 
 npm install
 npm install babel @rollup/plugin-babel @babel/plugin-transform-flow-strip-types @babel/preset-react --save
