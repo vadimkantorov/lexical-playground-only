@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/plugin-transform-flow-strip-types": "^7.23.3",
+    "@babel/preset-react": "^7.23.3",
     "@excalidraw/excalidraw": "^0.17.0",
     "@lexical/clipboard": "0.12.5",
     "@lexical/code": "0.12.5",
@@ -25,6 +27,8 @@
     "@lexical/selection": "0.12.5",
     "@lexical/table": "0.12.5",
     "@lexical/utils": "0.12.5",
+    "@rollup/plugin-babel": "^6.0.4",
+    "babel": "^6.23.0",
     "katex": "^0.15.2",
     "lexical": "0.12.5",
     "lodash-es": "^4.17.21",
