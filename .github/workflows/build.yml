@@ -1,0 +1,19 @@
+name: build
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Build Lexical
+        run: |
+          npm install
+          npm install babel @rollup/plugin-babel @babel/plugin-transform-flow-strip-types @babel/preset-react --save
+          npm run build-prod
+          cp build/assets/main.*.js build/assets/main.js
+          cp build/assets/main.*.css build/assets/main.css
+       - uses: actions/upload-artifact@v4
+         with:
+           name: build
+           path: build/
