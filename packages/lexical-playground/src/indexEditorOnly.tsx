@@ -12,7 +12,7 @@ import './index.css';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 
-import App from './App';
+import AppEditorOnly from './AppEditorOnly';
 
 // Handle runtime errors
 const showErrorOverlay = (err: Event) => {
@@ -32,8 +32,18 @@ window.addEventListener('unhandledrejection', ({reason}) =>
   showErrorOverlay(reason),
 );
 
-createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+//createRoot(document.getElementById('root') as HTMLElement).render(
+//  <React.StrictMode>
+//    <App />
+//  </React.StrictMode>,
+//);
+
+
+window.LexicalMarkdownEditor = query_selector =>
+{
+    const root = createRoot(document.querySelector(query_selector) as HTMLElement);
+    const app = React.createElement(AppEditorOnly);
+    root.render(app);
+    //root.render(<React.StrictMode><App /></React.StrictMode>);
+    return app;
+}
