@@ -1,7 +1,7 @@
 .PHONY: assets
 assets:
+	-rm -rf assets packages/lexical-playground/build
 	pushd packages/lexical-playground
-	-rm -rf build
 	npm install
 	npm install babel @rollup/plugin-babel @babel/plugin-transform-flow-strip-types @babel/preset-react --save
 	npm run build-prod

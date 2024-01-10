@@ -15,6 +15,7 @@ cd lexical-playground-only
 # git commit -a -m 'extracting only packages/lexical-playground and packages/shared'
 
 # make assets 
+rm -rf assets packages/lexical-playground/build || true
 pushd packages/lexical-playground
 npm install
 npm install babel @rollup/plugin-babel @babel/plugin-transform-flow-strip-types @babel/preset-react --save
