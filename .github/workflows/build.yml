@@ -17,7 +17,8 @@ jobs:
 #          cp build/assets/main.*.js build/assets/main.js
 #          cp build/assets/main.*.css build/assets/main.css
 
-       - uses: actions/upload-artifact@v4
+       - name: Upload Artifact
+         uses: actions/upload-artifact@v4
          with:
            name: build
            path: build/
