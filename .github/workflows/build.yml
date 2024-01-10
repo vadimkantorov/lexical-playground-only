@@ -6,6 +6,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
+        with:
+          node-version: 20
 #      - name: Build Lexical
 #        run: |
 #          npm install
@@ -13,7 +15,7 @@ jobs:
 #          npm run build-prod
 #          cp build/assets/main.*.js build/assets/main.js
 #          cp build/assets/main.*.css build/assets/main.css
-       - uses: actions/upload-artifact@v4
-         with:
-           name: build
-           path: build/
+#       - uses: actions/upload-artifact@v4
+#         with:
+#           name: build
+#           path: build/
