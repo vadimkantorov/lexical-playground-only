@@ -7,5 +7,5 @@ assets:
 	npm run build-prod
 	cp build/assets/main.*.js build/assets/main.js
 	cp build/assets/main.*.css build/assets/main.css
+	cp -r build/assets ../../
 	popd
-	cp -r packages/lexical-playground/build/assets .
