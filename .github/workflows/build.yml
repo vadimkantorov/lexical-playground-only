@@ -8,17 +8,14 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-
-      - name: Build Lexical
-        run: |
+      - run: |
+          cd packages/lexical-playground
           npm install
           npm install babel @rollup/plugin-babel @babel/plugin-transform-flow-strip-types @babel/preset-react --save
           npm run build-prod
           cp build/assets/main.*.js build/assets/main.js
           cp build/assets/main.*.css build/assets/main.css
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: build
           path: build/
