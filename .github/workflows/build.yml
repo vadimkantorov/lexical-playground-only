@@ -1,13 +1,10 @@
 name: build
 on: workflow_dispatch
-# https://github.blog/changelog/2021-04-20-github-actions-control-permissions-for-github_token/
-permissions: write-all
-
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - uses: browser-actions/setup-chrome@v1
+      - uses: actions/checkout@v4
 
 
 
