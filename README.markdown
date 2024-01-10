@@ -14,16 +14,11 @@ cd lexical-playground-only
 # git add -A -f packages
 # git commit -a -m 'extracting only packages/lexical-playground and packages/shared'
 
-# make assets 
-rm -rf assets packages/lexical-playground/build || true
-cd packages/lexical-playground
-npm install
-npm install babel @rollup/plugin-babel @babel/plugin-transform-flow-strip-types @babel/preset-react --save
-npm run build-prod
-cp build/assets/main.*.js build/assets/main.js
-cp build/assets/main.*.css build/assets/main.css
-cp -r build/assets ../../
-cd -
+make assets 
 
-python3 -m http.server
+# open the browser
+open http://localhost:8000
+
+# serve /index.html and /assets
+python -m http.server
 ```
