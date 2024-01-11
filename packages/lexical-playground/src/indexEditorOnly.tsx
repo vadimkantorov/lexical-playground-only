@@ -12,8 +12,8 @@ import './index.css';
 import { createRoot } from 'react-dom/client';
 import React, { createElement, forwardRef, useRef, useImperativeHandle } from 'react';
 
+import { $convertToMarkdownString, $convertFromMarkdownString, TRANSFORMERS } from '@lexical/markdown';
 import { InitialConfigType, LexicalComposer } from '@lexical/react/LexicalComposer';
-import { $convertFromMarkdownString, TRANSFORMERS } from '@lexical/markdown';
 import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin';
 import { EditorSetOptions } from 'lexical/LexicalEditor';
 import { EditorState, LexicalEditor } from 'lexical';
@@ -80,6 +80,14 @@ const App = forwardRef<EditorMethods>(function App(_, ref): JSX.Element {
                 if (editorState != null) {
                     $convertFromMarkdownString(markdown, TRANSFORMERS)
                 }
+            })
+        },
+        getMarkdown(): Promise<string> {
+            return new Promise(resolve => {
+                editorRef.current?.update(() => {
+                    const md = $convertToMarkdownString(TRANSFORMERS)
+                    resolve(md)
+                })
             })
         }
     }))
