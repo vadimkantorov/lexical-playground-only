@@ -9,7 +9,7 @@
         async function on_editor_script_loaded()
         {
             const editor = await window.LexicalMarkdownEditor('#editor');
-            console.log(editor)
+            console.log(editor._getRawEditorInstance())
 
             const md = `
 # [WIP ] lexical-playground-only

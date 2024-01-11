@@ -68,6 +68,9 @@ const App = forwardRef<EditorMethods>(function App(_, ref): JSX.Element {
     const editorRef = useRef<LexicalEditor>(null)
 
     useImperativeHandle(ref, () => ({
+        _getRawEditorInstance(): LexicalEditor | null {
+            return editorRef.current
+        },
         getEditorState(): EditorState | undefined {
             return editorRef.current?.getEditorState()
         },
