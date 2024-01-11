@@ -49,9 +49,11 @@ window.addEventListener('unhandledrejection', ({ reason }) =>
 );
 
 interface EditorMethods {
+    _getRawEditorInstance: () => LexicalEditor | null;
     getEditorState: () => EditorState | undefined;
     setEditorState: (editorState: EditorState, editorOptions?: EditorSetOptions) => void;
     setMarkdown: (markdown: string) => void;
+    getMarkdown: () => Promise<string>;
 }
 
 const App = forwardRef<EditorMethods>(function App(_, ref): JSX.Element {
