@@ -11,6 +11,7 @@ cd lexical-playground-only
 # wget https://github.com/facebook/lexical/archive/refs/tags/v0.12.5.tar.gz
 # tar -xf v0.12.5.tar.gz --strip-components=1 lexical-0.12.5/packages/lexical-playground lexical-0.12.5/packages/shared
 # sed -i "s@alias: moduleResolution@alias: [ { find: 'shared', replacement: path.resolve('../shared/src') } ]@" packages/lexical-playground/vite.prod.config.js
+# sed -i "s@split: new URL('./split/index.html', import.meta.url).pathname,@@" packages/lexical-playground/vite.prod.config.js
 # git add -A -f packages
 # git commit -a -m 'extracting only packages/lexical-playground and packages/shared'
 

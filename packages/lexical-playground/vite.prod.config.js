@@ -191,7 +191,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: new URL('./index.html', import.meta.url).pathname,
-        split: new URL('./split/index.html', import.meta.url).pathname,
+        
       },
     },
     commonjsOptions: {include: []},

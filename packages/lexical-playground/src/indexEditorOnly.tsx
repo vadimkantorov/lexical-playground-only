@@ -12,7 +12,14 @@ import './index.css';
 import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 
-import AppEditorOnly from './AppEditorOnly';
+import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
+import {LexicalComposer} from '@lexical/react/LexicalComposer';
+
+import EditorOnly from './EditorOnly';
+import PlaygroundNodes from './nodes/PlaygroundNodes';
+import {TableContext} from './plugins/TablePlugin';
+import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
+
 
 // Handle runtime errors
 const showErrorOverlay = (err: Event) => {
@@ -32,11 +39,27 @@ window.addEventListener('unhandledrejection', ({reason}) =>
   showErrorOverlay(reason),
 );
 
-//createRoot(document.getElementById('root') as HTMLElement).render(
-//  <React.StrictMode>
-//    <App />
-//  </React.StrictMode>,
-//);
+function AppEditorOnly(): JSX.Element {
+  const initialConfig = {
+    editorState: null, // undefined?
+    namespace: 'Playground',
+    nodes: [...PlaygroundNodes],
+    onError: (error: Error) => {
+      throw error;
+    },
+    theme: PlaygroundEditorTheme,
+  };
+
+  return (
+    <LexicalComposer initialConfig={initialConfig}>
+        <TableContext>
+            <div className="editor-shell">
+              <EditorOnly showTreeView={false} showActions={false} />
+            </div>
+        </TableContext>
+    </LexicalComposer>
+  );
+}
 
 
 window.LexicalMarkdownEditor = query_selector =>
@@ -44,6 +67,11 @@ window.LexicalMarkdownEditor = query_selector =>
     const root = createRoot(document.querySelector(query_selector) as HTMLElement);
     const app = React.createElement(AppEditorOnly);
     root.render(app);
-    //root.render(<React.StrictMode><App /></React.StrictMode>);
     return app;
+}
+
+window.LexicalMarkdownEditor_getEditor = () => 
+{
+    const [editor] = useLexicalComposerContext(); 
+    return editor;
 }
