@@ -165,7 +165,7 @@ export default function EditorOnly({
         />
         <TableCellResizer />
         <ImagesPlugin />
-        {false && <InlineImagePlugin />}
+        <InlineImagePlugin />
         <LinkPlugin />
         <PollPlugin />
         <TwitterPlugin />
