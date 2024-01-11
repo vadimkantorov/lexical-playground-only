@@ -9,99 +9,105 @@
 import './setupEnv';
 import './index.css';
 
-import * as React from 'react';
-import {createRoot} from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
+import React, { createElement, forwardRef, useRef, useImperativeHandle } from 'react';
 
-import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
-import {LexicalComposer} from '@lexical/react/LexicalComposer';
+import { InitialConfigType, LexicalComposer } from '@lexical/react/LexicalComposer';
+import { $convertFromMarkdownString, TRANSFORMERS } from '@lexical/markdown';
+import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin';
+import { EditorSetOptions } from 'lexical/LexicalEditor';
+import { EditorState, LexicalEditor } from 'lexical';
 
 import EditorOnly from './EditorOnly';
+import { TableContext } from './plugins/TablePlugin';
 import PlaygroundNodes from './nodes/PlaygroundNodes';
-import {TableContext} from './plugins/TablePlugin';
 import PlaygroundEditorTheme from './themes/PlaygroundEditorTheme';
+
+declare global {
+    interface Window {
+        LexicalMarkdownEditor: (selector: string) => void;
+    }
+}
 
 
 // Handle runtime errors
 const showErrorOverlay = (err: Event) => {
-  const ErrorOverlay = customElements.get('vite-error-overlay');
-  if (!ErrorOverlay) {
-    return;
-  }
-  const overlay = new ErrorOverlay(err);
-  const body = document.body;
-  if (body !== null) {
-    body.appendChild(overlay);
-  }
+    const ErrorOverlay = customElements.get('vite-error-overlay');
+    if (!ErrorOverlay) {
+        return;
+    }
+    const overlay = new ErrorOverlay(err);
+    const body = document.body;
+    if (body !== null) {
+        body.appendChild(overlay);
+    }
 };
 
 window.addEventListener('error', showErrorOverlay);
-window.addEventListener('unhandledrejection', ({reason}) =>
-  showErrorOverlay(reason),
+window.addEventListener('unhandledrejection', ({ reason }) =>
+    showErrorOverlay(reason),
 );
 
-/*
-class AppEditorOnly extends React.Component
-{
-    constructor()
-    {
-        super();
-        this.myRef = React.createRef();
-    }
+interface EditorMethods {
+    getEditorState: () => EditorState | undefined;
+    setEditorState: (editorState: EditorState, editorOptions?: EditorSetOptions) => void;
+    setMarkdown: (markdown: string) => void;
+}
 
-    componentDidMount()
-    {
-       console.log('window.LexicalMarkdownEditor3', this.myRef);
-    }
-
-    render()
-    {
-        return <LexicalComposer initialConfig={this.props.initialConfig} ref={this.myRef}>
-            <TableContext>
-                <div className="editor-shell">
-                    <EditorOnly showTreeView={false} showActions={false} />
-                </div>
-                <GetLexicalComposerContext />
-            </TableContext>
-        </LexicalComposer>
-    }
-}*/
-
-window.LexicalMarkdownEditor = query_selector =>
-{
-    const root = createRoot(document.querySelector(query_selector) as HTMLElement);
-
-    const initialConfig = {
-        editorState: null, // undefined?
-        //editorState: () => {
-        //  $convertFromMarkdownString(markdown, TRANSFORMERS);
-        //},
+const App = forwardRef<EditorMethods>(function App(_, ref): JSX.Element {
+    const initialConfig: InitialConfigType = {
+        editorState: null,
         namespace: 'Playground',
         nodes: [...PlaygroundNodes],
         onError: (error: Error) => {
-            throw error;
+            throw error
         },
         theme: PlaygroundEditorTheme,
-    };
-    
-    let resolveEditor = null;
-    const resultPromise = new Promise((resolve, reject) => {resolveEditor = resolve});
-    const GetLexicalComposerContext = () =>
-    {
-        const [editor] = useLexicalComposerContext();
-        resolveEditor(editor);
-        return null;
     }
 
-    root.render(
+    const editorRef = useRef<LexicalEditor>(null)
+
+    useImperativeHandle(ref, () => ({
+        getEditorState(): EditorState | undefined {
+            return editorRef.current?.getEditorState()
+        },
+        setEditorState(editorState: EditorState, editorOptions?: EditorSetOptions): void {
+            editorRef.current?.setEditorState(editorState, editorOptions)
+        },
+        setMarkdown(markdown: string): void {
+            editorRef.current?.update(() => {
+                const editorState = editorRef.current?.getEditorState()
+                if (editorState != null) {
+                    $convertFromMarkdownString(markdown, TRANSFORMERS)
+                }
+            })
+        }
+    }))
+
+
+    return (
         <LexicalComposer initialConfig={initialConfig}>
             <TableContext>
                 <div className="editor-shell">
-                  <EditorOnly showTreeView={false} showActions={false} />
+                    <EditorOnly showTreeView={false} showActions={false} />
+                    <EditorRefPlugin editorRef={editorRef} />
                 </div>
             </TableContext>
-            <GetLexicalComposerContext />
+
         </LexicalComposer>
-    );
-    
-    return resultPromise;
+    )
+})
+
+function createApp(selector: string): Promise<EditorMethods | null> {
+    return new Promise((resolve) => {
+        const root = createRoot(document.querySelector(selector) as HTMLElement)
+
+        const app = createElement(App, {
+            ref: resolve,
+        })
+
+        root.render(app)
+    })
 }
+
+window.LexicalMarkdownEditor = createApp

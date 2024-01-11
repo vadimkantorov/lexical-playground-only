@@ -8,8 +8,23 @@
         <script>
         async function on_editor_script_loaded()
         {
-            window.editor = await window.LexicalMarkdownEditor('#editor');
-            console.log(window.editor);
+            const editor = await window.LexicalMarkdownEditor('#editor');
+            console.log(editor)
+
+            const md = `
+# [WIP ] lexical-playground-only
+
+The idea is to have https://github.com/facebook/lexical/tree/main/packages/lexical-playground as a separate, lean repo bundlable as a single JS file to be used as a simple client-side markdown editor with usage API similar to https://github.com/quilljs/quill (and usable in vanilla HTML/JS without mandatory usage of package managers/bundlers/react)
+
+Based on the broken release https://github.com/facebook/lexical/releases/tag/v0.12.5: https://github.com/facebook/lexical/discussions/5392
+
+- do this
+- do that
+- cheers
+`
+            editor.setMarkdown(md)
+
+            window.editor = editor;
         }
         </script>
     </body>

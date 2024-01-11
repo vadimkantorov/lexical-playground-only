@@ -195,11 +195,11 @@ export default defineConfig({
       },
     },
     commonjsOptions: {include: []},
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        toplevel: true,
-      }
-    },
+    minify: false,
+    // terserOptions: {
+    //   compress: {
+    //     toplevel: true,
+    //   }
+    // },
   },
 });
