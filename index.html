@@ -6,11 +6,10 @@
     <body>
         <div id="editor"></div>
         <script>
-        function on_editor_script_loaded()
+        async function on_editor_script_loaded()
         {
-            window.editor = window.LexicalMarkdownEditor('#editor');
+            window.editor = await window.LexicalMarkdownEditor('#editor');
             console.log(window.editor);
-            console.log(window.LexicalMarkdownEditor_getEditor());
         }
         </script>
     </body>

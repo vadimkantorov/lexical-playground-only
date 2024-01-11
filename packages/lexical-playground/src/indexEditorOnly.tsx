@@ -39,39 +39,69 @@ window.addEventListener('unhandledrejection', ({reason}) =>
   showErrorOverlay(reason),
 );
 
-function AppEditorOnly(): JSX.Element {
-  const initialConfig = {
-    editorState: null, // undefined?
-    namespace: 'Playground',
-    nodes: [...PlaygroundNodes],
-    onError: (error: Error) => {
-      throw error;
-    },
-    theme: PlaygroundEditorTheme,
-  };
+/*
+class AppEditorOnly extends React.Component
+{
+    constructor()
+    {
+        super();
+        this.myRef = React.createRef();
+    }
 
-  return (
-    <LexicalComposer initialConfig={initialConfig}>
-        <TableContext>
-            <div className="editor-shell">
-              <EditorOnly showTreeView={false} showActions={false} />
-            </div>
-        </TableContext>
-    </LexicalComposer>
-  );
-}
+    componentDidMount()
+    {
+       console.log('window.LexicalMarkdownEditor3', this.myRef);
+    }
 
+    render()
+    {
+        return <LexicalComposer initialConfig={this.props.initialConfig} ref={this.myRef}>
+            <TableContext>
+                <div className="editor-shell">
+                    <EditorOnly showTreeView={false} showActions={false} />
+                </div>
+                <GetLexicalComposerContext />
+            </TableContext>
+        </LexicalComposer>
+    }
+}*/
 
 window.LexicalMarkdownEditor = query_selector =>
 {
     const root = createRoot(document.querySelector(query_selector) as HTMLElement);
-    const app = React.createElement(AppEditorOnly);
-    root.render(app);
-    return app;
-}
 
-window.LexicalMarkdownEditor_getEditor = () => 
-{
-    const [editor] = useLexicalComposerContext(); 
-    return editor;
+    const initialConfig = {
+        editorState: null, // undefined?
+        //editorState: () => {
+        //  $convertFromMarkdownString(markdown, TRANSFORMERS);
+        //},
+        namespace: 'Playground',
+        nodes: [...PlaygroundNodes],
+        onError: (error: Error) => {
+            throw error;
+        },
+        theme: PlaygroundEditorTheme,
+    };
+    
+    let resolveEditor = null;
+    const resultPromise = new Promise((resolve, reject) => {resolveEditor = resolve});
+    const GetLexicalComposerContext = () =>
+    {
+        const [editor] = useLexicalComposerContext();
+        resolveEditor(editor);
+        return null;
+    }
+
+    root.render(
+        <LexicalComposer initialConfig={initialConfig}>
+            <TableContext>
+                <div className="editor-shell">
+                  <EditorOnly showTreeView={false} showActions={false} />
+                </div>
+            </TableContext>
+            <GetLexicalComposerContext />
+        </LexicalComposer>
+    );
+    
+    return resultPromise;
 }
